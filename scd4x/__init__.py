@@ -70,12 +70,12 @@ class SCD4X:
             msg_r = i2c_msg.read(self.address, response_length)
             self.bus.i2c_rdwr(msg_r)
 
-            result = list(msg_r)
+            result = bytes(msg_r)
             data = []
             for chunk in range(0, len(result), 3):
                 if self.crc8(result[chunk : chunk + 2]) != result[chunk + 2]:
                     raise ValueError("ICP10125: Invalid CRC8 in response.")
-                data.append((result[chunk] << 8) | result[chunk + 1])
+                data.append(int.from_bytes(result[chunk : chunk + 2], "big"))
             if len(data) == 1:
                 return data[0]
             else:
@@ -120,7 +120,7 @@ class SCD4X:
 
     def data_ready(self):
         response = self.rdwr(DATA_READY, response_length=1, delay=1)
-        return (response & 0x07FF) != 0
+        return response & 0x07FF
 
     def get_serial_number(self):
         response = self.rdwr(SERIAL_NUMBER, response_length=3, delay=1)
