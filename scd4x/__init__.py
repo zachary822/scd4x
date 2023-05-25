@@ -48,6 +48,12 @@ class SCD4X:
         if not quiet:
             print(f"SCD4X, Serial: {serial:06x}")
 
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.bus.close()
+
     def rdwr(self, command, value=None, response_length=0, delay=0):
         if value is not None:
             msg_w = i2c_msg.write(self.address, struct.pack(">HHB", command, value, self.crc8(value)))
