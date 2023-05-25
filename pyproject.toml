@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "scd4x"
+version = "0.1.0"
+description = ""
+authors = ["Zachary Juang <zachary822@me.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+smbus2 = "^0.4.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
