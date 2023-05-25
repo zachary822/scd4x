@@ -29,6 +29,10 @@ SET_ASCE = 0x2416
 DEFAULT_I2C_ADDRESS = 0x62
 
 
+MSG_COMMAND_VALUE = struct.Struct(">HHB")
+MSG_COMMAND = struct.Struct(">H")
+
+
 class SCD4X:
     def __init__(self, address=None, quiet=True):
         self.co2 = 0
@@ -56,9 +60,9 @@ class SCD4X:
 
     def rdwr(self, command, value=None, response_length=0, delay=0):
         if value is not None:
-            msg_w = i2c_msg.write(self.address, struct.pack(">HHB", command, value, self.crc8(value)))
+            msg_w = i2c_msg.write(self.address, MSG_COMMAND_VALUE.pack(command, value, self.crc8(value)))
         else:
-            msg_w = i2c_msg.write(self.address, struct.pack(">H", command))
+            msg_w = i2c_msg.write(self.address, MSG_COMMAND.pack(command))
 
         self.bus.i2c_rdwr(msg_w)
 
