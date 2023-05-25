@@ -143,7 +143,7 @@ class SCD4X:
         return 175.0 * response / (1 << 16)
 
     def set_altitude(self, altitude):
-        self.rdwr(SET_ALTITUDE, value=altitude)
+        self.rdwr(SET_ALTITUDE, value=altitude, delay=1)
 
     def get_altitude(self):
         return self.rdwr(GET_ALTITUDE, response_length=1, delay=1)
@@ -157,9 +157,10 @@ class SCD4X:
     def persist_settings(self):
         self.rdwr(PERSIST_SETTINGS, delay=800)
 
-    def crc8(self, data, polynomial=0x31):
-        if type(data) is int:
-            data = [(data >> 8) & 0xFF, data & 0xFF]
+    @staticmethod
+    def crc8(data, polynomial=0x31):
+        if isinstance(data, int):
+            data = (data & 0xFFFF).to_bytes(2, "big")
         result = 0xFF
         for byte in data:
             result ^= byte
