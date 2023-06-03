@@ -3,6 +3,8 @@ import time
 
 from smbus2 import SMBus, i2c_msg
 
+from scd4x.crc import crc8
+
 __version__ = "0.0.1"
 
 
@@ -171,13 +173,4 @@ class SCD4X:
     def crc8(data, polynomial=0x31):
         if isinstance(data, int):
             data = (data & 0xFFFF).to_bytes(2, "big")
-        result = 0xFF
-        for byte in data:
-            result ^= byte
-            for bit in range(8):
-                if result & 0x80:
-                    result <<= 1
-                    result ^= polynomial
-                else:
-                    result <<= 1
-        return result & 0xFF
+        return crc8(data, polynomial)

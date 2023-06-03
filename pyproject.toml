@@ -4,10 +4,12 @@ version = "0.2.2"
 description = ""
 authors = ["Zachary Juang <zachary822@me.com>"]
 readme = "README.md"
+build = "build.py"
 
 [tool.poetry.dependencies]
 python = "^3.9"
 smbus2 = "^0.4.2"
+cython = "^0.29.35"
 
 [tool.ruff]
 line-length = 120
@@ -20,5 +22,5 @@ profile = "black"
 filter_files = true
 
 [build-system]
-requires = ["poetry-core"]
+requires = ["poetry-core", "setuptools", "Cython"]
 build-backend = "poetry.core.masonry.api"
