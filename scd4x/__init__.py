@@ -109,11 +109,11 @@ class SCD4X:
             raise RuntimeError("Self test failed!")
 
     def measure(self, blocking=True, timeout=10):
-        t_start = time.time()
+        t_start = time.perf_counter()
         while not self.data_ready():
             if not blocking:
                 return
-            if time.time() - t_start > timeout:
+            if time.perf_counter() - t_start > timeout:
                 raise RuntimeError("Timeout waiting for data ready.")
             time.sleep(0.1)
 
@@ -122,7 +122,7 @@ class SCD4X:
         self.temperature = -45 + 175.0 * response[1] / (1 << 16)
         self.relative_humidity = 100.0 * response[2] / (1 << 16)
 
-        return self.co2, self.temperature, self.relative_humidity, time.time()
+        return self.co2, self.temperature, self.relative_humidity
 
     def data_ready(self):
         response = self.rdwr(DATA_READY, response_length=1, delay=1)
