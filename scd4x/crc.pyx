@@ -1,5 +1,5 @@
-cpdef char crc8(char *data, char polynomial):
-    cdef char result, b
+cpdef unsigned char crc8(unsigned char *data, unsigned char polynomial):
+    cdef unsigned char result, b
     result = 0xFF
 
     for b in data[:2]:
